@@ -1,6 +1,6 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
-import { useRawInitData } from '@telegram-apps/sdk-react';
+//import { useRawInitData } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import ColorButton from './components/ColorButton';
 import { AnimatePresence, motion } from "motion/react"
