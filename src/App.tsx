@@ -78,6 +78,7 @@ function App() {
           <ColorButton color="#5288c1" onClick={() => setStep(1)}>
             Начать
           </ColorButton>
+          <p>{initDataRaw}</p>
         </motion.div>
       )}
       {step === 1 && (
