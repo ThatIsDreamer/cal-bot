@@ -58,7 +58,7 @@ mockTelegramEnv({
 
 
 function App() {  
-  const initDataRaw = useRawInitData()
+  //const initDataRaw = useRawInitData()
   const [step, setStep] = useState(0)
   return (
     <AnimatePresence mode="wait">
@@ -78,7 +78,6 @@ function App() {
           <ColorButton color="#5288c1" onClick={() => setStep(1)}>
             Начать
           </ColorButton>
-          <p>{initDataRaw}</p>
         </motion.div>
       )}
       {step === 1 && (
