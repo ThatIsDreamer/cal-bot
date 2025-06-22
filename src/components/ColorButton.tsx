@@ -26,6 +26,7 @@ const ColorButton: React.FC<ColorButtonProps> = ({
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.6 : 1,
         transition: 'opacity 0.2s ease-in-out',
+        margin: 10,
       }}
     >
       {children}
