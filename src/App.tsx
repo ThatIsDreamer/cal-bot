@@ -15,7 +15,7 @@ import {
 } from '@/components/animate-ui/components/tabs';
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from 'react';
-import { ArrowRight, ArrowLeft, Weight } from 'lucide-react'
+import { ArrowRight,  } from 'lucide-react'
 
 
 const themeParams = {
