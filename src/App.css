@@ -25,10 +25,29 @@ input {
   border: solid 2px #C7C7CC;
   font-size: 22px;
   padding: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
   margin: 10px;
+
 }
+
+p{
+ font-size: 1.2em;
+}
+
 h1 {
   font-size: 3.2em;
   color: #213547;
   font-weight: bold;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 60vh;
+  height: 100%;
+  width: 100%;
+  padding: 2rem 0;
 }

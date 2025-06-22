@@ -4,6 +4,9 @@ import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
+import nameAnimation from './assets/name.gif'
+import heightAnimation from './assets/height.gif'
+import weightAnimation from './assets/weight.gif'
 import ColorButton from './components/ColorButton';
 import {
   Tabs,
@@ -12,6 +15,7 @@ import {
 } from '@/components/animate-ui/components/tabs';
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from 'react';
+import { ArrowRight, ArrowLeft, Weight } from 'lucide-react'
 
 
 const themeParams = {
@@ -68,6 +72,8 @@ function App() {
   //const initDataRaw = useRawInitData()
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
+  const [height, setHeight] = useState<number | ''>('')
+  const [weight, setWeight] = useState<number | ''>('')
   const [isMale, setIsMale] = useState(true)
   return (
     <div className="app-fullscreen">
@@ -79,6 +85,7 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
             >
             <img width={200} height={200} src={myAnimation} alt="A looping animation" />
             <h1>Привет!</h1>
@@ -86,7 +93,7 @@ function App() {
               CalBot - это твой путь к здоровью!
             </p>
             <ColorButton color="#5288c1" onClick={() => setStep(1)}>
-              Начать
+              Начать <ArrowRight/>
             </ColorButton>
           </motion.div>
         )}
@@ -97,7 +104,9 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
           >
+            <img width={200} height={200} src={nameAnimation}/>
             <h1>
               Как тебя зовут?
             </h1>
@@ -105,7 +114,7 @@ function App() {
             <br>
             </br>
             <ColorButton color="#5288c1" onClick={() => setStep(2)}>
-              Далее
+              Далее <ArrowRight/>
             </ColorButton>
           </motion.div>
         )}
@@ -116,7 +125,7 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
-            style={{ display: "flex", justifyContent: 'center', alignItems: 'center', flexDirection: "column" }}
+            className='steps'
           >
             <AnimatePresence mode="wait">
               {isMale ? (
@@ -164,8 +173,8 @@ function App() {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            <ColorButton color="#5288c1" onClick={() => setStep(2)}>
-              Далее 
+            <ColorButton color="#5288c1" onClick={() => setStep(3)}>
+              Далее <ArrowRight/>
             </ColorButton>
 
           </motion.div>
@@ -177,10 +186,73 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
           >
+           <img width={200} height={200} src={heightAnimation}/>
             <h1>
-              Как зовут тебя?
+              Твой рост
             </h1>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <input
+                type="number"
+                placeholder="Рост"
+                value={height}
+                maxLength={3}
+                onChange={e => setHeight(e.target.value === '' ? '' : parseInt(e.target.value))}
+                style={{
+                  width: 80
+                }}
+              />
+              <p>
+                см
+              </p>
+              
+            </div>
+            <ColorButton color="#5288c1" onClick={() => setStep(4)}>
+              Далее <ArrowRight/>
+            </ColorButton>
+
+          </motion.div>
+            )}
+             {step === 4 && (
+          <motion.div
+            key="step-4"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
+            exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
+          >
+            <img width={200} height={200} src={weightAnimation}/>
+            <h1>Твой вес</h1>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <input
+                type="number"
+                placeholder="Вес"
+                value={weight}
+                lang='ru'
+                onChange={e => setWeight(e.target.value === '' ? '' : parseInt(e.target.value))}
+                style={{
+                  width: 80
+                }}
+              />
+              <p>
+                кг
+              </p>
+              
+            </div>
+            <ColorButton color="#5288c1" onClick={() => setStep(4)}>
+              Далее <ArrowRight/>
+            </ColorButton>
+
           </motion.div>
             )}
       </AnimatePresence>

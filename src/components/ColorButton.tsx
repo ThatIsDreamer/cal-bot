@@ -27,6 +27,8 @@ const ColorButton: React.FC<ColorButtonProps> = ({
         opacity: disabled ? 0.6 : 1,
         transition: 'opacity 0.2s ease-in-out',
         margin: 10,
+        display: 'flex',
+        gap: 5,
       }}
     >
       {children}
