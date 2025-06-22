@@ -198,7 +198,7 @@ function App() {
               alignItems: 'center'
             }}>
               <input
-                type="number"
+                type="tel"
                 placeholder="Рост"
                 value={height}
                 maxLength={3}
@@ -235,7 +235,7 @@ function App() {
               alignItems: 'center'
             }}>
               <input
-                type="number"
+                type="tel"
                 placeholder="Вес"
                 value={weight}
                 lang='ru'
