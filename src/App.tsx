@@ -20,6 +20,9 @@ import { ArrowRight, ArrowLeft } from 'lucide-react'
 import ProgressBar from './components/ProgressBar';
 import Picker from 'react-mobile-picker'
 import { swipeBehavior } from '@telegram-apps/sdk';
+import type { WheelPickerOption } from "@/components/wheel-picker";
+import { WheelPicker, WheelPickerWrapper } from "@/components/wheel-picker";
+
 
 const themeParams = {
   accent_text_color: '#6ab2f2',
@@ -78,17 +81,9 @@ function App() {
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
   const [height, setHeight] = useState<number>(170) // Default height to 170cm
-
-  const heightOptions = Array.from({ length: 250 - 100 + 1 }, (_, i) => 100 + i);
-  const heightSelections: { height: number[] } = {
-    height: heightOptions,
-  };
   const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
 
-  const weightOptions = Array.from({ length: 150 - 40 + 1 }, (_, i) => 40 + i);
-  const weightSelections: { weight: number[] } = {
-    weight: weightOptions,
-  };
+
   // Теперь используем gender вместо isMale
   const [gender, setGender] = useState<Gender>('male')
   const totalSteps = 5; // Total number of onboarding steps
@@ -99,6 +94,17 @@ function App() {
     swipeBehavior.isVerticalEnabled(); // false
   }
 
+  const createArray = (length: number, add = 0): WheelPickerOption[] =>
+    Array.from({ length }, (_, i) => {
+      const value = i + add;
+      return {
+        label: value.toString().padStart(2, "0"),
+        value: value.toString(),
+      };
+    });
+  
+  const weightOptions = createArray(150)
+  const heightOptions = createArray(300)
   return (
     <div className="app-fullscreen">
       <ProgressBar className='mt-5' currentStep={step} totalSteps={totalSteps} />
@@ -218,13 +224,12 @@ function App() {
               </TabsList>
             </Tabs>
             <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(3)}>
+                Далее <ArrowRight/>
+              </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
               <ArrowLeft/>
                Назад
-      
-              </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(3)}>
-                Далее <ArrowRight/>
               </ColorButton>
             </div>
 
@@ -249,33 +254,29 @@ function App() {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-              <Picker
-                value={{ height: height }}
-                onChange={(newValue: any) => setHeight(parseInt(newValue.height))}
-                className="picker-input-style"
-              >
-                {Object.keys(heightSelections).map(name => (
-                  <Picker.Column key={name} name={name}>
-                    {heightSelections[name as keyof typeof heightSelections].map((option: number) => (
-                      <Picker.Item key={option} value={option} className="picker-item">
-                        {option}
-                      </Picker.Item>
-                    ))}
-                  </Picker.Column>
-                ))}
-              </Picker>
+              <div className='w-20'>
+                <WheelPickerWrapper className='border-0'>
+                  <WheelPicker
+                    options={heightOptions}
+                    value={height.toString()}
+                    defaultValue="170"
+                    visibleCount={16}
+                    onValueChange={(e: string) => setHeight(parseInt(e))}
+                  />
+                </WheelPickerWrapper>
+              </div>
               <p>
                 см
               </p>
               
             </div>
             <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(4)}>
+                Далее <ArrowRight/>
+              </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
                 <ArrowLeft/>
                 Назад
-              </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(4)}>
-                Далее <ArrowRight/>
               </ColorButton>
             </div>
 
@@ -296,34 +297,32 @@ function App() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center'
-            }}>
-              <Picker
-                value={{ weight: weight }}
-                onChange={(newValue: any) => setWeight(parseInt(newValue.weight))}
-                className="picker-input-style"
-              >
-                {Object.keys(weightSelections).map(name => (
-                  <Picker.Column key={name} name={name}>
-                    {weightSelections[name as keyof typeof weightSelections].map((option: number) => (
-                      <Picker.Item key={option} value={option} className="picker-item">
-                        {option}
-                      </Picker.Item>
-                    ))}
-                  </Picker.Column>
-                ))}
-              </Picker>
+            }}>   
+              
+              <div className="w-20">
+              <WheelPickerWrapper className='border-0'>
+                    <WheelPicker
+                      options={weightOptions}
+                      value={weight.toString()}
+                      defaultValue="60"
+                      visibleCount={16}
+                      onValueChange={(e: string) => setWeight(parseInt(e))}
+                    />
+                </WheelPickerWrapper>
+              </div>
+               
               <p>
                 кг
               </p>
               
             </div>
             <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(5)}>
+                Далее <ArrowRight/>
+              </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
                 <ArrowLeft/>
                 Назад
-              </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(5)}>
-                Далее <ArrowRight/>
               </ColorButton>
             </div>
 
