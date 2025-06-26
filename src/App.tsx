@@ -253,7 +253,7 @@ function App() {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-              <div className='w-20'>
+              <div className='w-50'>
                 <WheelPickerWrapper className='border-0'>
                   <WheelPicker
                     options={heightOptions}
@@ -297,7 +297,7 @@ function App() {
               alignItems: 'center'
             }}>   
               
-              <div className="w-20">
+              <div className="w-50">
               <WheelPickerWrapper className='border-0'>
                     <WheelPicker
                       options={weightOptions}
