@@ -7,6 +7,7 @@ import femaleAnimation from './assets/female.gif';
 import nameAnimation from './assets/name.gif'
 import heightAnimation from './assets/height.gif'
 import weightAnimation from './assets/weight.gif'
+import huhAnimation from './assets/huh.gif'
 import ColorButton from './components/ColorButton';
 import {
   Tabs,
@@ -15,8 +16,9 @@ import {
 } from '@/components/animate-ui/components/tabs';
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from 'react';
-import { ArrowRight,  } from 'lucide-react'
-
+import { ArrowRight, ArrowLeft } from 'lucide-react'
+import ProgressBar from './components/ProgressBar';
+import Picker from 'react-mobile-picker'
 
 const themeParams = {
   accent_text_color: '#6ab2f2',
@@ -67,16 +69,32 @@ mockTelegramEnv({
 });
 
 
+// Новый тип для пола
+type Gender = 'male' | 'female' | 'secret';
 
 function App() {  
   //const initDataRaw = useRawInitData()
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
-  const [height, setHeight] = useState<number | ''>('')
-  const [weight, setWeight] = useState<number | ''>('')
-  const [isMale, setIsMale] = useState(true)
+  const [height, setHeight] = useState<number>(170) // Default height to 170cm
+
+  const heightOptions = Array.from({ length: 250 - 100 + 1 }, (_, i) => 100 + i);
+  const heightSelections: { height: number[] } = {
+    height: heightOptions,
+  };
+  const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
+
+  const weightOptions = Array.from({ length: 150 - 40 + 1 }, (_, i) => 40 + i);
+  const weightSelections: { weight: number[] } = {
+    weight: weightOptions,
+  };
+  // Теперь используем gender вместо isMale
+  const [gender, setGender] = useState<Gender>('male')
+  const totalSteps = 5; // Total number of onboarding steps
+
   return (
     <div className="app-fullscreen">
+      <ProgressBar className='mt-5' currentStep={step} totalSteps={totalSteps} />
       <AnimatePresence mode="wait">
         {step === 0 && (
           <motion.div
@@ -128,7 +146,7 @@ function App() {
             className='steps'
           >
             <AnimatePresence mode="wait">
-              {isMale ? (
+              {gender === 'male' ? (
                 <motion.img
                   key="male-img"
                   width={200}
@@ -140,13 +158,25 @@ function App() {
                   exit={{ opacity: 0, x: -100, transition: { duration: 0.2 } }}
                   transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
                 />
-              ) : (
+              ) : gender === 'female' ? (
                 <motion.img
                   key="female-img"
                   width={200}
                   height={200}
                   src={femaleAnimation}
                   alt="dancing female"
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
+                />
+              ) : (
+                <motion.img
+                  key="secret-img"
+                  width={200}
+                  height={200}
+                  src={huhAnimation}
+                  alt="секретный пол"
                   initial={{ opacity: 0, x: 100 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -100, transition: { duration: 0.2 } }}
@@ -161,21 +191,35 @@ function App() {
 
             <Tabs
               style={{ transform: "scale(1.1)" }}
-              value={isMale ? "tab1" : "tab2"}
-              onValueChange={(val) => setIsMale(val === "tab1")}
+              value={gender === 'male' ? "tab1" : gender === 'female' ? "tab2" : "tab3"}
+              onValueChange={(val) => {
+                if (val === "tab1") setGender('male');
+                else if (val === "tab2") setGender('female');
+                else setGender('secret');
+              }}
             >
               <TabsList>
-                <TabsTrigger value="tab1" style={{ fontSize: "1.2em", padding: "18px 36px" }}>
+                <TabsTrigger value="tab1" className="gender-tab-trigger">
                   Мужской
                 </TabsTrigger>
-                <TabsTrigger value="tab2" style={{ fontSize: "1.2em", padding: "18px 36px" }}>
+                <TabsTrigger value="tab2" className="gender-tab-trigger">
                   Женский
+                </TabsTrigger>
+                <TabsTrigger value="tab3" className="gender-tab-trigger">
+                  Секрет
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            <ColorButton color="#5288c1" onClick={() => setStep(3)}>
-              Далее <ArrowRight/>
-            </ColorButton>
+            <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+              <ArrowLeft/>
+               Назад
+      
+              </ColorButton>
+              <ColorButton color="#5288c1" onClick={() => setStep(3)}>
+                Далее <ArrowRight/>
+              </ColorButton>
+            </div>
 
           </motion.div>
         )}
@@ -190,6 +234,7 @@ function App() {
           >
            <img width={200} height={200} src={heightAnimation}/>
             <h1>
+              
               Твой рост
             </h1>
             <div style={{
@@ -197,24 +242,35 @@ function App() {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-              <input
-                type="tel"
-                placeholder="Рост"
-                value={height}
-                maxLength={3}
-                onChange={e => setHeight(e.target.value === '' ? '' : parseInt(e.target.value))}
-                style={{
-                  width: 80
-                }}
-              />
+              <Picker
+                value={{ height: height }}
+                onChange={(newValue: any) => setHeight(parseInt(newValue.height))}
+                className="picker-input-style"
+              >
+                {Object.keys(heightSelections).map(name => (
+                  <Picker.Column key={name} name={name}>
+                    {heightSelections[name as keyof typeof heightSelections].map((option: number) => (
+                      <Picker.Item key={option} value={option} className="picker-item">
+                        {option}
+                      </Picker.Item>
+                    ))}
+                  </Picker.Column>
+                ))}
+              </Picker>
               <p>
                 см
               </p>
               
             </div>
-            <ColorButton color="#5288c1" onClick={() => setStep(4)}>
-              Далее <ArrowRight/>
-            </ColorButton>
+            <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                <ArrowLeft/>
+                Назад
+              </ColorButton>
+              <ColorButton color="#5288c1" onClick={() => setStep(4)}>
+                Далее <ArrowRight/>
+              </ColorButton>
+            </div>
 
           </motion.div>
             )}
@@ -234,24 +290,35 @@ function App() {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-              <input
-                type="tel"
-                placeholder="Вес"
-                value={weight}
-                lang='ru'
-                onChange={e => setWeight(e.target.value === '' ? '' : parseInt(e.target.value))}
-                style={{
-                  width: 80
-                }}
-              />
+              <Picker
+                value={{ weight: weight }}
+                onChange={(newValue: any) => setWeight(parseInt(newValue.weight))}
+                className="picker-input-style"
+              >
+                {Object.keys(weightSelections).map(name => (
+                  <Picker.Column key={name} name={name}>
+                    {weightSelections[name as keyof typeof weightSelections].map((option: number) => (
+                      <Picker.Item key={option} value={option} className="picker-item">
+                        {option}
+                      </Picker.Item>
+                    ))}
+                  </Picker.Column>
+                ))}
+              </Picker>
               <p>
                 кг
               </p>
               
             </div>
-            <ColorButton color="#5288c1" onClick={() => setStep(4)}>
-              Далее <ArrowRight/>
-            </ColorButton>
+            <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                <ArrowLeft/>
+                Назад
+              </ColorButton>
+              <ColorButton color="#5288c1" onClick={() => setStep(5)}>
+                Далее <ArrowRight/>
+              </ColorButton>
+            </div>
 
           </motion.div>
             )}
