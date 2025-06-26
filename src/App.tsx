@@ -18,7 +18,6 @@ import { AnimatePresence, motion } from "motion/react"
 import { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import ProgressBar from './components/ProgressBar';
-import Picker from 'react-mobile-picker'
 import { swipeBehavior } from '@telegram-apps/sdk';
 import type { WheelPickerOption } from "@/components/wheel-picker";
 import { WheelPicker, WheelPickerWrapper } from "@/components/wheel-picker";
