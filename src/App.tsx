@@ -259,7 +259,7 @@ function App() {
                     options={heightOptions}
                     value={height.toString()}
                     defaultValue="170"
-                    visibleCount={8}
+                    visibleCount={12}
                     onValueChange={(e: string) => setHeight(parseInt(e))}
                     classNames={{
                       optionItem: "text-12-important",
@@ -303,7 +303,7 @@ function App() {
                       options={weightOptions}
                       value={weight.toString()}
                       defaultValue="60"
-                      visibleCount={8}
+                      visibleCount={12}
                       onValueChange={(e: string) => setWeight(parseInt(e))}
                       classNames={{
                         optionItem: "text-12-important",
