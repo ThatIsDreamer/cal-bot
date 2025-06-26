@@ -15,10 +15,11 @@ import {
   TabsTrigger,
 } from '@/components/animate-ui/components/tabs';
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import ProgressBar from './components/ProgressBar';
 import Picker from 'react-mobile-picker'
+import { swipeBehavior } from '@telegram-apps/sdk';
 
 const themeParams = {
   accent_text_color: '#6ab2f2',
@@ -92,26 +93,11 @@ function App() {
   const [gender, setGender] = useState<Gender>('male')
   const totalSteps = 5; // Total number of onboarding steps
 
-  useEffect(() => {
-    // Проверяем, что Telegram.WebApp доступен
-    const webApp = (window as any)?.Telegram?.WebApp;
-
-    if (!webApp) {
-      console.error('Telegram.WebApp не найден!');
-      return;
-    }
-
-    // Сообщаем Telegram, что приложение готово
-    webApp.ready();
-
-    // Option 1: Disable vertical swipe to close entirely.
-    webApp.setupSwipeBehavior({ allow_vertical_swipe: false });
-
-    // Option 2: Alternatively, enable a closing confirmation prompt.
-    // Uncomment the line below if you prefer this option.
-    // webApp.isClosingConfirmationEnabled = true;
-  }, []);
-
+  
+  if (swipeBehavior.disableVertical.isAvailable()) {
+    swipeBehavior.disableVertical();
+    swipeBehavior.isVerticalEnabled(); // false
+  }
 
   return (
     <div className="app-fullscreen">
