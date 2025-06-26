@@ -105,7 +105,7 @@ function App() {
   const weightOptions = createArray(150)
   const heightOptions = createArray(300)
   return (
-    <div className="app-fullscreen">
+    <div className="app-fullscreen bg-white">
       <ProgressBar className='mt-5' currentStep={step} totalSteps={totalSteps} />
       <AnimatePresence mode="wait">
         {step === 0 && (
