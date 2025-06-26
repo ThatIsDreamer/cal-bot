@@ -93,17 +93,17 @@ function App() {
     swipeBehavior.isVerticalEnabled(); // false
   }
 
-  const createArray = (length: number, add = 0): WheelPickerOption[] =>
+  const createArray = (length: number, add = 0, postfix = ""): WheelPickerOption[] =>
     Array.from({ length }, (_, i) => {
       const value = i + add;
       return {
-        label: value.toString().padStart(2, "0"),
+        label: value.toString().padStart(2, "0") + " " + postfix,
         value: value.toString(),
       };
     });
   
-  const weightOptions = createArray(150)
-  const heightOptions = createArray(300)
+  const weightOptions = createArray(150, 0, "кг")
+  const heightOptions = createArray(300, 0, "см")
   return (
     <div className="app-fullscreen bg-white">
       <ProgressBar className='mt-5' currentStep={step} totalSteps={totalSteps} />
@@ -117,7 +117,7 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
             >
-            <img width={200} height={200} src={myAnimation} alt="A looping animation" />
+            <img width={180} height={180} src={myAnimation} alt="A looping animation" />
             <h1>Привет!</h1>
             <p>
               CalBot - это твой путь к здоровью!
@@ -136,7 +136,7 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
           >
-            <img width={200} height={200} src={nameAnimation}/>
+            <img width={180} height={180} src={nameAnimation}/>
             <h1>
               Как тебя зовут?
             </h1>
@@ -161,8 +161,8 @@ function App() {
               {gender === 'male' ? (
                 <motion.img
                   key="male-img"
-                  width={200}
-                  height={200}
+                  width={180}
+                  height={180}
                   src={maleAnimation}
                   alt="dancing male"
                   initial={{ opacity: 0, x: 100 }}
@@ -173,8 +173,8 @@ function App() {
               ) : gender === 'female' ? (
                 <motion.img
                   key="female-img"
-                  width={200}
-                  height={200}
+                  width={180}
+                  height={180}
                   src={femaleAnimation}
                   alt="dancing female"
                   initial={{ opacity: 0, x: 100 }}
@@ -185,8 +185,8 @@ function App() {
               ) : (
                 <motion.img
                   key="secret-img"
-                  width={200}
-                  height={200}
+                  width={180}
+                  height={180}
                   src={huhAnimation}
                   alt="секретный пол"
                   initial={{ opacity: 0, x: 100 }}
@@ -243,7 +243,7 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
           >
-           <img width={200} height={200} src={heightAnimation}/>
+           <img width={180} height={180} src={heightAnimation}/>
             <h1>
               
               Твой рост
@@ -259,15 +259,15 @@ function App() {
                     options={heightOptions}
                     value={height.toString()}
                     defaultValue="170"
-                    visibleCount={16}
+                    visibleCount={8}
                     onValueChange={(e: string) => setHeight(parseInt(e))}
+                    classNames={{
+                      optionItem: "text-12-important",
+                      highlightItem: "text-13-important"
+                    }}
                   />
                 </WheelPickerWrapper>
               </div>
-              <p>
-                см
-              </p>
-              
             </div>
             <div className="button-group">
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
@@ -289,7 +289,7 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
           >
-            <img width={200} height={200} src={weightAnimation}/>
+            <img width={180} height={180} src={weightAnimation}/>
             <h1>Твой вес</h1>
             <div style={{
               display: 'flex',
@@ -303,16 +303,15 @@ function App() {
                       options={weightOptions}
                       value={weight.toString()}
                       defaultValue="60"
-                      visibleCount={16}
+                      visibleCount={8}
                       onValueChange={(e: string) => setWeight(parseInt(e))}
+                      classNames={{
+                        optionItem: "text-12-important",
+                        highlightItem: "text-13-important"
+                      }}
                     />
                 </WheelPickerWrapper>
-              </div>
-               
-              <p>
-                кг
-              </p>
-              
+              </div>       
             </div>
             <div className="button-group">
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
