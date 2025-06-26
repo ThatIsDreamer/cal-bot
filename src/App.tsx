@@ -223,13 +223,13 @@ function App() {
               </TabsList>
             </Tabs>
             <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                <ArrowLeft/>
+              </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(3)}>
                 Далее <ArrowRight/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
-              <ArrowLeft/>
-               Назад
-              </ColorButton>
+
             </div>
 
           </motion.div>
@@ -270,12 +270,11 @@ function App() {
               
             </div>
             <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                    <ArrowLeft/>
+              </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(4)}>
                 Далее <ArrowRight/>
-              </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
-                <ArrowLeft/>
-                Назад
               </ColorButton>
             </div>
 
@@ -316,12 +315,11 @@ function App() {
               
             </div>
             <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                  <ArrowLeft/>
+              </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(5)}>
                 Далее <ArrowRight/>
-              </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
-                <ArrowLeft/>
-                Назад
               </ColorButton>
             </div>
 
