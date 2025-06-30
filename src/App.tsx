@@ -2,7 +2,7 @@ import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
 import { useLaunchParams } from '@telegram-apps/sdk-react';
-import { hapticFeedback } from '@telegram-apps/sdk';
+import { hapticFeedback, hapticFeedbackImpactOccurred } from '@telegram-apps/sdk';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -278,8 +278,8 @@ function App() {
                     value={height.toString()}
                     defaultValue="170"
                     visibleCount={12}
-                    onValueChange={(e: string) => {setHeight(parseInt(e)); if (hapticFeedback.impactOccurred.isAvailable()) {
-                      hapticFeedback.impactOccurred('medium');
+                    onValueChange={(e: string) => {setHeight(parseInt(e)); if (hapticFeedbackImpactOccurred.isAvailable()) {
+                      hapticFeedbackImpactOccurred('medium');
                     }}}
                     classNames={{
                       optionItem: "text-12-important",
@@ -324,8 +324,8 @@ function App() {
                       value={weight.toString()}
                       defaultValue="60"
                       visibleCount={12}
-                      onValueChange={(e: string) => {setWeight(parseInt(e)); if (hapticFeedback.impactOccurred.isAvailable()) {
-                        hapticFeedback.impactOccurred('medium');
+                      onValueChange={(e: string) => {setWeight(parseInt(e)); if (hapticFeedbackImpactOccurred.isAvailable()) {
+                        hapticFeedbackImpactOccurred('medium');
                       }}}
                       classNames={{
                         optionItem: "text-12-important",
