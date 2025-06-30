@@ -1,6 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
+import { useLaunchParams } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -15,7 +16,7 @@ import {
   TabsTrigger,
 } from '@/components/animate-ui/components/tabs';
 import { AnimatePresence, motion } from "motion/react"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import ProgressBar from './components/ProgressBar';
 import { swipeBehavior } from '@telegram-apps/sdk';
@@ -77,11 +78,24 @@ type Gender = 'male' | 'female' | 'secret';
 
 function App() {  
   //const initDataRaw = useRawInitData()
+  const launchParams = useLaunchParams()
+  
+  useEffect(() => {
+    console.log(launchParams)
+  },  [launchParams]) 
+
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
   const [height, setHeight] = useState<number>(170) // Default height to 170cm
   const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
 
+
+
+  useEffect(() => {
+    console.log(launchParams)
+    console.log(launchParams.tgWebAppData?.user?.first_name)
+    setName(launchParams.tgWebAppData?.user?.first_name ?? "")
+  },  [launchParams]) 
 
   // Теперь используем gender вместо isMale
   const [gender, setGender] = useState<Gender>('male')
