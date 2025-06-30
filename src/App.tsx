@@ -23,6 +23,8 @@ import ProgressBar from './components/ProgressBar';
 import { swipeBehavior } from '@telegram-apps/sdk';
 import type { WheelPickerOption } from "@/components/wheel-picker";
 import { WheelPicker, WheelPickerWrapper } from "@/components/wheel-picker";
+import eruda from 'eruda';
+
 
 
 const themeParams = {
@@ -78,6 +80,7 @@ mockTelegramEnv({
 type Gender = 'male' | 'female' | 'secret';
 
 function App() {  
+  eruda.init();
   //const initDataRaw = useRawInitData()
   const launchParams = useLaunchParams()
   
