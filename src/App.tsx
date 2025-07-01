@@ -1,7 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams, hapticFeedbackImpactOccurred, init } from '@telegram-apps/sdk-react';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -99,6 +99,7 @@ function App() {
     console.log(launchParams)
     console.log(launchParams.tgWebAppData?.user?.first_name)
     setName(launchParams.tgWebAppData?.user?.first_name ?? "")
+    backButton.show.ifAvailable();
   },  [launchParams]) 
 
   // Теперь используем gender вместо isMale
