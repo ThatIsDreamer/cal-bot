@@ -1,7 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton } from '@telegram-apps/sdk-react';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, mountBackButton, isBackButtonMounted } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -93,7 +93,11 @@ function App() {
   const [height, setHeight] = useState<number>(170) // Default height to 170cm
   const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
 
-
+  if (mountBackButton.isAvailable()) {
+    mountBackButton();
+    isBackButtonMounted(); // true
+  }
+  
 
   useEffect(() => {
     console.log(launchParams)
