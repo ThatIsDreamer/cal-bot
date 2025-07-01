@@ -2,7 +2,7 @@ import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
 import { useLaunchParams } from '@telegram-apps/sdk-react';
-import { hapticFeedbackSelectionChanged, init } from '@telegram-apps/sdk';
+import { hapticFeedback, hapticFeedbackImpactOccurred, init } from '@telegram-apps/sdk';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -82,7 +82,7 @@ type Gender = 'male' | 'female' | 'secret';
 function App() {  
   eruda.init();
   init();
-  //const initDataRaw = useRawInitData()
+   //const initDataRaw = useRawInitData()
   const launchParams = useLaunchParams()
   
   useEffect(() => {
@@ -281,9 +281,9 @@ function App() {
                     visibleCount={12}
                     onValueChange={(e: string) => {
                       setHeight(parseInt(e)); 
-                      if (hapticFeedbackSelectionChanged.isAvailable()) {
-                        hapticFeedbackSelectionChanged();
-                      }
+                      if (hapticFeedbackImpactOccurred.isAvailable()) {
+                        hapticFeedbackImpactOccurred('medium');
+                      } 
                   }}
                     classNames={{
                       optionItem: "text-12-important",
@@ -330,8 +330,8 @@ function App() {
                       visibleCount={12}
                       onValueChange={(e: string) => {
                         setWeight(parseInt(e));
-                        if (hapticFeedbackSelectionChanged.isAvailable()) {
-                          hapticFeedbackSelectionChanged();
+                        if (hapticFeedbackImpactOccurred.isAvailable()) {
+                          hapticFeedbackImpactOccurred('medium');
                         }
                     }}
                       classNames={{
