@@ -1,8 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams } from '@telegram-apps/sdk-react';
-import { hapticFeedbackImpactOccurred, init } from '@telegram-apps/sdk';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
