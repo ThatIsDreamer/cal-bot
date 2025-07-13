@@ -1,7 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, mountBackButton, isBackButtonMounted } from '@telegram-apps/sdk-react';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, mountBackButton, isBackButtonMounted, miniApp,  mountMiniAppSync , swipeBehavior, isMiniAppMounted } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -23,7 +23,6 @@ import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import ProgressBar from './components/ProgressBar';
-import { swipeBehavior } from '@telegram-apps/sdk';
 import type { WheelPickerOption } from "@/components/wheel-picker";
 import { WheelPicker, WheelPickerWrapper } from "@/components/wheel-picker";
 import eruda from 'eruda';
@@ -123,6 +122,11 @@ function App() {
       const img = new window.Image();
       img.src = src;
     });
+    if (mountMiniAppSync.isAvailable()) {
+      mountMiniAppSync();
+      console.log("Mounting mini app")
+      console.log(isMiniAppMounted())
+    }
   }, []);
 
 
@@ -501,8 +505,8 @@ function App() {
                   text = 'Комфортная: 0.5 кг в неделю';
                 } else if (program === 'fast') {
                   color = 'black';
-                  text = 'Быстрая: примерно 1 кг в неделю';
-                } else if (program === 'slow') {
+                    text = 'Быстрая: примерно 1 кг в неделю';
+                  } else if (program === 'slow') {
                   color = 'black';
                   text = 'Медленная: примерно 0.25 кг в неделю';
                 }
@@ -566,7 +570,11 @@ function App() {
               </div>
             </div>
             <div className="button-group mt-1">
-              <ColorButton color="#5288c1" onClick={() => {/* финальная обработка */}}>
+              <ColorButton color="#5288c1" onClick={() => {
+                if (miniApp.close.isAvailable()) {
+                  miniApp.close();
+                }
+              }}>
                 Завершить
               </ColorButton>
             </div>
