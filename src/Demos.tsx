@@ -3,7 +3,7 @@ import './Demos.css'
 import { motion } from 'motion/react';
 
 const Demos: React.FC = () => {
-  const [current, setCurrent] = useState(50);
+  const [current] = useState(50);
   const [count, setCount] = useState(20); // количество элементов
   const constraintsRef = useRef<HTMLDivElement>(null);
   const innerDivRef = useRef<HTMLDivElement>(null);
