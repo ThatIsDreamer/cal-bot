@@ -95,7 +95,7 @@ function App() {
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
   const [height, setHeight] = useState<number>(170) // Default height to 170cm
-  const [weight] = useState<number>(70) // Default weight to 70kg
+  const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
   const [goal, setGoal] = useState<'lose' | 'maintain' | 'gain'>('maintain'); // новое состояние для цели
   const [desiredWeight, setDesiredWeight] = useState<number>(weight); // желаемый вес
   // Добавляем useEffect для автоматического обновления цели
@@ -122,7 +122,7 @@ function App() {
   // Теперь используем gender вместо isMale
   const [gender, setGender] = useState<Gender>('male')
   const [program, setProgram] = useState<'comfortable' | 'fast' | 'slow'>('comfortable'); // новое состояние
-  const totalSteps = 6; // увеличено на 1
+  const totalSteps = 8; // увеличено на 1
 
   
   if (swipeBehavior.disableVertical.isAvailable()) {
@@ -282,7 +282,6 @@ function App() {
           >
            <img width={180} height={180} src={heightAnimation}/>
             <h1>
-              
               Твой рост
             </h1>
             <div style={{
@@ -319,10 +318,9 @@ function App() {
                 Далее <ArrowRight/>
               </ColorButton>
             </div>
-
           </motion.div>
-            )}
-             {step === 4 && (
+        )}
+        {step === 4 && (
           <motion.div
             key="step-4"
             initial={{ opacity: 0, x: 100 }}
@@ -331,7 +329,55 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
           >
-            {/* Используем goal вместо вычисления на лету */}
+            <img width={180} height={180} src={weightAnimation}/>
+            <h1>Твой вес</h1>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>   
+              <div className="w-70">
+              <WheelPickerWrapper className='border-0'>
+                    <WheelPicker
+                      options={weightOptions}
+                      value={weight.toString()}
+                      defaultValue="70"
+                      visibleCount={12}
+                      onValueChange={(e: string) => {
+                        setWeight(parseInt(e));
+                        setDesiredWeight(parseInt(e));  
+                        if (hapticFeedbackImpactOccurred.isAvailable()) {
+                          hapticFeedbackImpactOccurred('medium');
+                        }
+                    }}
+                      classNames={{
+                        optionItem: "text-12-important",
+                        highlightItem: "text-13-important"
+                      }}
+                    />
+                </WheelPickerWrapper>
+              </div>       
+            </div>
+            <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                  <ArrowLeft/>
+              </ColorButton>
+              <ColorButton color="#5288c1" onClick={() => setStep(5)}>
+                Далее <ArrowRight/>
+              </ColorButton>
+            </div>
+          </motion.div>
+        )}
+        {step === 5 && (
+          <motion.div
+            key="step-5"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
+            exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
+          >
+            {/* Goal selector step */}
             <div style={{ textAlign: 'center', marginBottom: 16 }}>
               <span style={{ color: 'black', fontSize: 30, fontWeight: 600 }}>
                 {goal === 'lose' ? 'Снижение веса' : goal === 'gain' ? 'Набор веса' : 'Поддержание веса'}
@@ -361,7 +407,6 @@ function App() {
                   <WheelPicker
                     options={weightOptions}
                     value={desiredWeight.toString()}
-                    defaultValue={weight.toString()}
                     visibleCount={12}
                     onValueChange={(e: string) => {
                       setDesiredWeight(parseInt(e));
@@ -381,15 +426,15 @@ function App() {
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
                 <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(5)}>
+              <ColorButton color="#5288c1" onClick={() => setStep(6)}>
                 Далее <ArrowRight/>
               </ColorButton>
             </div>
           </motion.div>
         )}
-        {step === 5 && (
+        {step === 6 && (
           <motion.div
-            key="step-5"
+            key="step-6"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
@@ -414,14 +459,14 @@ function App() {
               onValueChange={(val) => setProgram(val as 'comfortable' | 'fast' | 'slow')}
             >
               <TabsList>
+              <TabsTrigger value="slow" className="gender-tab-trigger">
+                  Медленная
+                </TabsTrigger>
                 <TabsTrigger value="comfortable" className="gender-tab-trigger">
                   Комфортная
                 </TabsTrigger>
                 <TabsTrigger value="fast" className="gender-tab-trigger">
                   Быстрая
-                </TabsTrigger>
-                <TabsTrigger value="slow" className="gender-tab-trigger">
-                  Медленная
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -451,15 +496,15 @@ function App() {
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
                 <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(6)}>
+              <ColorButton color="#5288c1" onClick={() => setStep(7)}>
                 Готово
               </ColorButton>
             </div>
           </motion.div>
         )}
-        {step === 6 && (
+        {step === 7 && (
           <motion.div
-            key="step-6"
+            key="step-7"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
@@ -488,12 +533,12 @@ function App() {
                 <span style={{ fontSize: 18 }}>Текущий вес: <b>{weight} кг</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(4)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(5)}>
                 <img src={goalAnimation} alt="Желаемый вес" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Желаемый вес: <b>{desiredWeight} кг</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(5)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(6)}>
                 <img src={program === 'comfortable' ? normalAnimation : program === 'fast' ? rocketAnimation : slowAnimation} alt="Программа" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Программа: <b>{program === 'comfortable' ? 'Комфортная' : program === 'fast' ? 'Быстрая' : 'Медленная'}</b></span>
                 <ArrowRight size={20} />
