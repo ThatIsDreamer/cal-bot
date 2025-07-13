@@ -571,9 +571,8 @@ function App() {
             </div>
             <div className="button-group mt-1">
               <ColorButton color="#5288c1" onClick={() => {
-                if (miniApp.close.isAvailable()) {
-                  miniApp.close();
-                }
+                miniApp.close();
+                console.log("Closing mini app")
               }}>
                 Завершить
               </ColorButton>
