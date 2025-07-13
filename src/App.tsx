@@ -105,6 +105,26 @@ function App() {
     else setGoal('maintain');
   }, [desiredWeight, weight]);
 
+  useEffect(() => {
+    const gifs = [
+      myAnimation,
+      maleAnimation,
+      femaleAnimation,
+      nameAnimation,
+      heightAnimation,
+      weightAnimation,
+      huhAnimation,
+      normalAnimation,
+      rocketAnimation,
+      slowAnimation,
+      goalAnimation,
+    ];
+    gifs.forEach(src => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, []);
+
 
   if (mountBackButton.isAvailable()) {
     mountBackButton();
