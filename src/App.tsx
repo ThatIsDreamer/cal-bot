@@ -95,9 +95,16 @@ function App() {
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
   const [height, setHeight] = useState<number>(170) // Default height to 170cm
-  const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
+  const [weight] = useState<number>(70) // Default weight to 70kg
   const [goal, setGoal] = useState<'lose' | 'maintain' | 'gain'>('maintain'); // новое состояние для цели
   const [desiredWeight, setDesiredWeight] = useState<number>(weight); // желаемый вес
+  // Добавляем useEffect для автоматического обновления цели
+  useEffect(() => {
+    if (desiredWeight < weight) setGoal('lose');
+    else if (desiredWeight > weight) setGoal('gain');
+    else setGoal('maintain');
+  }, [desiredWeight, weight]);
+
 
   if (mountBackButton.isAvailable()) {
     mountBackButton();
@@ -324,31 +331,12 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
           >
-            {/* Определяем цель на лету */}
-            {(() => {
-              let goalType: 'lose' | 'maintain' | 'gain' = 'maintain';
-              if (desiredWeight < weight) goalType = 'lose';
-              else if (desiredWeight > weight) goalType = 'gain';
-              let color = "black"
-              let sign = '';
-              let text = '';
-              if (goalType === 'lose') {
-                sign = '-';
-                text = 'Снижение веса';
-              } else if (goalType === 'gain') {
-                sign = '+';
-                text = 'Набор веса';
-              } else {
-                text = 'Поддержание веса';
-              }
-              return (
-                <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                  <span style={{ color , fontSize: 30, fontWeight: 600 }}>
-                     {text}
-                  </span>
-                </div>
-              );
-            })()}
+            {/* Используем goal вместо вычисления на лету */}
+            <div style={{ textAlign: 'center', marginBottom: 16 }}>
+              <span style={{ color: 'black', fontSize: 30, fontWeight: 600 }}>
+                {goal === 'lose' ? 'Снижение веса' : goal === 'gain' ? 'Набор веса' : 'Поддержание веса'}
+              </span>
+            </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
               {/* Разница веса */}
               {(() => {
@@ -441,18 +429,15 @@ function App() {
             <div style={{ minHeight: 40, marginBottom: 24, marginTop: 8, textAlign: 'center', fontSize: 16 }}>
               {(() => {
                 let color = 'black';
-                let sign = '';
                 let text = '';
                 if (program === 'comfortable') {
                   color = 'black';
                   text = 'Комфортная: 0.5 кг в неделю';
                 } else if (program === 'fast') {
                   color = 'black';
-                  sign = '-';
                   text = 'Быстрая: примерно 1 кг в неделю';
                 } else if (program === 'slow') {
                   color = 'black';
-                  sign = '+';
                   text = 'Медленная: примерно 0.25 кг в неделю';
                 }
                 return (
