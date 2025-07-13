@@ -143,6 +143,7 @@ function App() {
   const [gender, setGender] = useState<Gender>('male')
   const [program, setProgram] = useState<'comfortable' | 'fast' | 'slow'>('comfortable'); // новое состояние
   const totalSteps = 8; // увеличено на 1
+  const [editingFromSummary, setEditingFromSummary] = useState<number | null>(null); // если не null, значит редактируем из финального шага
 
   
   if (swipeBehavior.disableVertical.isAvailable()) {
@@ -200,7 +201,7 @@ function App() {
             <input type="text" placeholder="Имя" value={name} onChange={(e) => setName(e.target.value)} />
             <br>
             </br>
-            <ColorButton color="#5288c1" onClick={() => setStep(2)}>
+            <ColorButton color="#5288c1" onClick={() => editingFromSummary === 1 ? (setStep(7), setEditingFromSummary(null)) : setStep(2)}>
               Далее <ArrowRight/>
             </ColorButton>
           </motion.div>
@@ -280,10 +281,10 @@ function App() {
               </TabsList>
             </Tabs>
             <div className="button-group">
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 2 ? (setStep(7), setEditingFromSummary(null)) : setStep(3)}>
                 <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(3)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 2 ? (setStep(7), setEditingFromSummary(null)) : setStep(3)}>
                 Далее <ArrowRight/>
               </ColorButton>
 
@@ -331,10 +332,10 @@ function App() {
               </div>
             </div>
             <div className="button-group">
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 3 ? (setStep(7), setEditingFromSummary(null)) : setStep(4)}>
                     <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(4)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 3 ? (setStep(7), setEditingFromSummary(null)) : setStep(4)}>
                 Далее <ArrowRight/>
               </ColorButton>
             </div>
@@ -379,10 +380,10 @@ function App() {
               </div>       
             </div>
             <div className="button-group">
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 4 ? (setStep(7), setEditingFromSummary(null)) : setStep(5)}>
                   <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(5)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 4 ? (setStep(7), setEditingFromSummary(null)) : setStep(5)}>
                 Далее <ArrowRight/>
               </ColorButton>
             </div>
@@ -443,10 +444,10 @@ function App() {
               </div>
             </div>
             <div className="button-group">
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 5 ? (setStep(7), setEditingFromSummary(null)) : setStep(6)}>
                 <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(6)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 5 ? (setStep(7), setEditingFromSummary(null)) : setStep(6)}>
                 Далее <ArrowRight/>
               </ColorButton>
             </div>
@@ -513,10 +514,10 @@ function App() {
               })()}
             </div>
             <div className="button-group">
-              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 6 ? (setStep(7), setEditingFromSummary(null)) : setStep(7)}>
                 <ArrowLeft/>
               </ColorButton>
-              <ColorButton color="#5288c1" onClick={() => setStep(7)}>
+              <ColorButton color="#5288c1" onClick={() => editingFromSummary === 6 ? (setStep(7), setEditingFromSummary(null)) : setStep(7)}>
                 Готово
               </ColorButton>
             </div>
@@ -529,42 +530,42 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
-            className='steps'
+            className='steps mb-0'
           >
             <h1>Проверь свои данные</h1>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, margin: '24px 0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(1)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => { setEditingFromSummary(1); setStep(1); }}>
                 <img src={nameAnimation} alt="Имя" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Имя: <b>{name}</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(2)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => { setEditingFromSummary(2); setStep(2); }}>
                 <img src={gender === 'male' ? maleAnimation : gender === 'female' ? femaleAnimation : huhAnimation} alt="Пол" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Пол: <b>{gender === 'male' ? 'Мужской' : gender === 'female' ? 'Женский' : 'Секрет'}</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(3)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => { setEditingFromSummary(3); setStep(3); }}>
                 <img src={heightAnimation} alt="Рост" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Рост: <b>{height} см</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(4)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => { setEditingFromSummary(4); setStep(4); }}>
                 <img src={weightAnimation} alt="Текущий вес" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Текущий вес: <b>{weight} кг</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(5)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => { setEditingFromSummary(5); setStep(5); }}>
                 <img src={goalAnimation} alt="Желаемый вес" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Желаемый вес: <b>{desiredWeight} кг</b></span>
                 <ArrowRight size={20} />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(6)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => { setEditingFromSummary(6); setStep(6); }}>
                 <img src={program === 'comfortable' ? normalAnimation : program === 'fast' ? rocketAnimation : slowAnimation} alt="Программа" width={48} height={48} />
                 <span style={{ fontSize: 18 }}>Программа: <b>{program === 'comfortable' ? 'Комфортная' : program === 'fast' ? 'Быстрая' : 'Медленная'}</b></span>
                 <ArrowRight size={20} />
               </div>
             </div>
-            <div className="button-group">
+            <div className="button-group mt-1">
               <ColorButton color="#5288c1" onClick={() => {/* финальная обработка */}}>
                 Завершить
               </ColorButton>
