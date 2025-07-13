@@ -9,7 +9,11 @@ import nameAnimation from './assets/name.gif'
 import heightAnimation from './assets/height.gif'
 import weightAnimation from './assets/weight.gif'
 import huhAnimation from './assets/huh.gif'
+import normalAnimation from './assets/normal.gif'
+import rocketAnimation from './assets/rocket.gif'
+import slowAnimation from './assets/slow.gif'
 import ColorButton from './components/ColorButton';
+import goalAnimation from './assets/goal.gif'
 import {
   Tabs,
   TabsList,
@@ -92,6 +96,8 @@ function App() {
   const [name, setName] = useState('')
   const [height, setHeight] = useState<number>(170) // Default height to 170cm
   const [weight, setWeight] = useState<number>(70) // Default weight to 70kg
+  const [goal, setGoal] = useState<'lose' | 'maintain' | 'gain'>('maintain'); // новое состояние для цели
+  const [desiredWeight, setDesiredWeight] = useState<number>(weight); // желаемый вес
 
   if (mountBackButton.isAvailable()) {
     mountBackButton();
@@ -108,7 +114,8 @@ function App() {
 
   // Теперь используем gender вместо isMale
   const [gender, setGender] = useState<Gender>('male')
-  const totalSteps = 5; // Total number of onboarding steps
+  const [program, setProgram] = useState<'comfortable' | 'fast' | 'slow'>('comfortable'); // новое состояние
+  const totalSteps = 6; // увеличено на 1
 
   
   if (swipeBehavior.disableVertical.isAvailable()) {
@@ -317,46 +324,203 @@ function App() {
             exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
             className='steps'
           >
-            <img width={180} height={180} src={weightAnimation}/>
-            <h1>Твой вес</h1>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>   
-              
-              <div className="w-70">
-              <WheelPickerWrapper className='border-0'>
-                    <WheelPicker
-                      options={weightOptions}
-                      value={weight.toString()}
-                      defaultValue="60"
-                      visibleCount={12}
-                      onValueChange={(e: string) => {
-                        setWeight(parseInt(e));
-                        if (hapticFeedbackImpactOccurred.isAvailable()) {
-                          hapticFeedbackImpactOccurred('medium');
-                        }
+            {/* Определяем цель на лету */}
+            {(() => {
+              let goalType: 'lose' | 'maintain' | 'gain' = 'maintain';
+              if (desiredWeight < weight) goalType = 'lose';
+              else if (desiredWeight > weight) goalType = 'gain';
+              let color = "black"
+              let sign = '';
+              let text = '';
+              if (goalType === 'lose') {
+                sign = '-';
+                text = 'Снижение веса';
+              } else if (goalType === 'gain') {
+                sign = '+';
+                text = 'Набор веса';
+              } else {
+                text = 'Поддержание веса';
+              }
+              return (
+                <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                  <span style={{ color , fontSize: 30, fontWeight: 600 }}>
+                     {text}
+                  </span>
+                </div>
+              );
+            })()}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
+              {/* Разница веса */}
+              {(() => {
+                const diff = desiredWeight - weight;
+                let color = '#708499';
+                let sign = '';
+                if (diff > 0) {
+                  color = '#2ecc40';
+                  sign = '+';
+                } else if (diff < 0) {
+                  color = '#ec3942';
+                  sign = '';
+                }
+                return (
+                  <span style={{ fontSize: 20, fontWeight: 600, color, marginBottom: 4 }}>
+                    {diff === 0 ? '0' : `${sign}${diff}`} кг
+                  </span>
+                );
+              })()}
+              <div className='w-70'>
+                <WheelPickerWrapper className='border-0'>
+                  <WheelPicker
+                    options={weightOptions}
+                    value={desiredWeight.toString()}
+                    defaultValue={weight.toString()}
+                    visibleCount={12}
+                    onValueChange={(e: string) => {
+                      setDesiredWeight(parseInt(e));
+                      if (hapticFeedbackImpactOccurred.isAvailable()) {
+                        hapticFeedbackImpactOccurred('medium');
+                      }
                     }}
-                      classNames={{
-                        optionItem: "text-12-important",
-                        highlightItem: "text-13-important"
-                      }}
-                    />
+                    classNames={{
+                      optionItem: "text-12-important",
+                      highlightItem: "text-13-important"
+                    }}
+                  />
                 </WheelPickerWrapper>
-              </div>       
+              </div>
             </div>
             <div className="button-group">
               <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
-                  <ArrowLeft/>
+                <ArrowLeft/>
               </ColorButton>
               <ColorButton color="#5288c1" onClick={() => setStep(5)}>
                 Далее <ArrowRight/>
               </ColorButton>
             </div>
-
           </motion.div>
-            )}
+        )}
+        {step === 5 && (
+          <motion.div
+            key="step-5"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
+            exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
+          >
+            <h1>Выбери программу</h1>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+              {program === 'comfortable' && (
+                <img src={normalAnimation} alt="Комфортная" width={120} height={120} />
+              )}
+              {program === 'fast' && (
+                <img src={rocketAnimation} alt="Быстрая" width={120} height={120} />
+              )}
+              {program === 'slow' && (
+                <img src={slowAnimation} alt="Медленная" width={120} height={120} />
+              )}
+            </div>
+            <Tabs
+              style={{ transform: "scale(1.1)", margin: '24px 0' }}
+              value={program}
+              onValueChange={(val) => setProgram(val as 'comfortable' | 'fast' | 'slow')}
+            >
+              <TabsList>
+                <TabsTrigger value="comfortable" className="gender-tab-trigger">
+                  Комфортная
+                </TabsTrigger>
+                <TabsTrigger value="fast" className="gender-tab-trigger">
+                  Быстрая
+                </TabsTrigger>
+                <TabsTrigger value="slow" className="gender-tab-trigger">
+                  Медленная
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            {/* Описание с цветом и знаком */}
+            <div style={{ minHeight: 40, marginBottom: 24, marginTop: 8, textAlign: 'center', fontSize: 16 }}>
+              {(() => {
+                let color = 'black';
+                let sign = '';
+                let text = '';
+                if (program === 'comfortable') {
+                  color = 'black';
+                  text = 'Комфортная: 0.5 кг в неделю';
+                } else if (program === 'fast') {
+                  color = 'black';
+                  sign = '-';
+                  text = 'Быстрая: примерно 1 кг в неделю';
+                } else if (program === 'slow') {
+                  color = 'black';
+                  sign = '+';
+                  text = 'Медленная: примерно 0.25 кг в неделю';
+                }
+                return (
+                  <span style={{ color }}>
+                     {text}
+                  </span>
+                );
+              })()}
+            </div>
+            <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => setStep(step - 1)}>
+                <ArrowLeft/>
+              </ColorButton>
+              <ColorButton color="#5288c1" onClick={() => setStep(6)}>
+                Готово
+              </ColorButton>
+            </div>
+          </motion.div>
+        )}
+        {step === 6 && (
+          <motion.div
+            key="step-6"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
+            exit={{ opacity: 0, x: -100, transition: { duration: 0.2} }}
+            className='steps'
+          >
+            <h1>Проверь свои данные</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, margin: '24px 0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(1)}>
+                <img src={nameAnimation} alt="Имя" width={48} height={48} />
+                <span style={{ fontSize: 18 }}>Имя: <b>{name}</b></span>
+                <ArrowRight size={20} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(2)}>
+                <img src={gender === 'male' ? maleAnimation : gender === 'female' ? femaleAnimation : huhAnimation} alt="Пол" width={48} height={48} />
+                <span style={{ fontSize: 18 }}>Пол: <b>{gender === 'male' ? 'Мужской' : gender === 'female' ? 'Женский' : 'Секрет'}</b></span>
+                <ArrowRight size={20} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(3)}>
+                <img src={heightAnimation} alt="Рост" width={48} height={48} />
+                <span style={{ fontSize: 18 }}>Рост: <b>{height} см</b></span>
+                <ArrowRight size={20} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(4)}>
+                <img src={weightAnimation} alt="Текущий вес" width={48} height={48} />
+                <span style={{ fontSize: 18 }}>Текущий вес: <b>{weight} кг</b></span>
+                <ArrowRight size={20} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(4)}>
+                <img src={goalAnimation} alt="Желаемый вес" width={48} height={48} />
+                <span style={{ fontSize: 18 }}>Желаемый вес: <b>{desiredWeight} кг</b></span>
+                <ArrowRight size={20} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => setStep(5)}>
+                <img src={program === 'comfortable' ? normalAnimation : program === 'fast' ? rocketAnimation : slowAnimation} alt="Программа" width={48} height={48} />
+                <span style={{ fontSize: 18 }}>Программа: <b>{program === 'comfortable' ? 'Комфортная' : program === 'fast' ? 'Быстрая' : 'Медленная'}</b></span>
+                <ArrowRight size={20} />
+              </div>
+            </div>
+            <div className="button-group">
+              <ColorButton color="#5288c1" onClick={() => {/* финальная обработка */}}>
+                Завершить
+              </ColorButton>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   )
