@@ -1,9 +1,10 @@
 import "./App.css";
-import { mockTelegramEnv, emitEvent } from "@telegram-apps/bridge";
+import { mockTelegramEnv, emitEvent, isTMA } from "@telegram-apps/bridge";
 import {
   useLaunchParams,
   hapticFeedbackImpactOccurred,
   backButton,
+  init,
 } from "@telegram-apps/sdk-react";
 import myAnimation from "./assets/wave.gif";
 import maleAnimation from "./assets/male.gif";
@@ -133,10 +134,10 @@ function App() {
   const heightOptions = createArray(300, 0, "см");
 
   useEffect(() => {
-    if (window.Telegram && window.Telegram.WebApp) {
+    init();
+    if (isTMA() && window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
-      // Optionally, handle theme changes here if needed
     } else {
       console.warn("Not running inside Telegram WebApp.");
     }
@@ -179,8 +180,8 @@ function App() {
   }, [desiredWeight, weight]);
 
   useEffect(() => {
-    const gifs = [
-      myAnimation,
+      const gifs = [
+        myAnimation,
       maleAnimation,
       femaleAnimation,
       nameAnimation,
@@ -873,7 +874,7 @@ function App() {
               <ColorButton
                 color="#5288c1"
                 onClick={() => {
-                  if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === "function") {
+                  if (isTMA() && window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === "function") {
                     window.Telegram.WebApp.close();
                   } else {
                     console.warn("Not running inside Telegram WebApp or close() not available.");
