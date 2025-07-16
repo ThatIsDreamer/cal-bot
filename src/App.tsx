@@ -1,7 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, swipeBehavior, isMiniAppMounted, miniApp, mountViewport, bindViewportCssVars, bindThemeParamsCssVars } from '@telegram-apps/sdk-react';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, swipeBehavior, isMiniAppMounted, miniApp, mountViewport, bindViewportCssVars, bindThemeParamsCssVars, closeMiniApp } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -93,7 +93,6 @@ function App() {
       bindThemeParamsCssVars();
     }
     console.log(isMiniAppMounted())
-
 
     mountViewport.isAvailable() && mountViewport().then(() => {
       bindViewportCssVars();
@@ -577,7 +576,7 @@ function App() {
             </div>
             <div className="button-group mt-1">
               <ColorButton color="#5288c1" onClick={() => {
-                miniApp.close();
+                closeMiniApp();
                 console.log("Closing mini app")
               }}>
                 Завершить
