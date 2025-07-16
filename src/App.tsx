@@ -144,40 +144,36 @@ function App() {
   const heightOptions = createArray(300, 0, "см");
 
   useEffect(() => {
-    const initApp = async () => {
+    // Only run if inside Telegram WebApp
+    if (window.Telegram && window.Telegram.WebApp) {
       try {
         // Initialize the SDK
         init();
 
-        // Small delay to ensure WebApp is ready
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        // Use ready() instead of deprecated mount
-        if (miniApp.ready.isAvailable()) {
-          miniApp.ready();
-          console.log("Mini app ready");
-        }
-
-        // Expand viewport (replacement for mountViewport)
-        if (viewport.expand.isAvailable()) {
-          viewport.expand();
-          bindViewportCssVars();
-          console.log("Viewport expanded");
-        }
-
-        // Bind theme variables
-        bindThemeParamsCssVars();
-
-        // Disable vertical swipe if available
-        if (swipeBehavior.disableVertical.isAvailable()) {
-          swipeBehavior.disableVertical();
-        }
+        setTimeout(() => {
+          // Mark mini app as ready
+          if (miniApp?.ready?.isAvailable?.() && typeof miniApp.ready === "function") {
+            miniApp.ready();
+          }
+          // Expand viewport if available
+          if (viewport?.expand?.isAvailable?.() && typeof viewport.expand === "function") {
+            viewport.expand();
+            bindViewportCssVars();
+          }
+          // Bind theme variables
+          bindThemeParamsCssVars();
+          // Disable vertical swipe if available
+          if (swipeBehavior?.disableVertical?.isAvailable?.() && typeof swipeBehavior.disableVertical === "function") {
+            swipeBehavior.disableVertical();
+          }
+        }, 100);
       } catch (error) {
         console.error("Failed to initialize Telegram SDK:", error);
       }
-    };
-
-    initApp();
+    } else {
+      // Not in Telegram WebApp, optionally handle mock environment here
+      console.warn("Not running inside Telegram WebApp.");
+    }
   }, []);
 
   // Back button handling
@@ -912,14 +908,14 @@ function App() {
                 color="#5288c1"
                 onClick={() => {
                   try {
-                    if (isRealTelegram() && closeMiniApp.isAvailable()) {
+                    if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === "function") {
+                      window.Telegram.WebApp.close();
+                    } else if (isRealTelegram() && closeMiniApp.isAvailable()) {
                       closeMiniApp();
                     } else {
                       console.log(
-                        "closeMiniApp not available or in mock environment"
+                        "closeMiniApp not available or not in Telegram WebApp"
                       );
-                      // Fallback to direct Telegram API
-                      window.Telegram?.WebApp?.close?.();
                     }
                   } catch (error) {
                     console.error("Error closing mini app:", error);
