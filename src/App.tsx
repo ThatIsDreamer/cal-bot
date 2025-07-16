@@ -1,5 +1,5 @@
 import "./App.css";
-import { isTMA } from "@telegram-apps/bridge";
+//import { isTMA } from "@telegram-apps/bridge";
 import {
   useLaunchParams,
   hapticFeedbackImpactOccurred,
