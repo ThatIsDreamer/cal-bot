@@ -1,7 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, mountBackButton, isBackButtonMounted, miniApp,  mountMiniAppSync , swipeBehavior, isMiniAppMounted } from '@telegram-apps/sdk-react';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, mountBackButton, isBackButtonMounted, mountMiniAppSync , swipeBehavior, isMiniAppMounted } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -26,7 +26,6 @@ import ProgressBar from './components/ProgressBar';
 import type { WheelPickerOption } from "@/components/wheel-picker";
 import { WheelPicker, WheelPickerWrapper } from "@/components/wheel-picker";
 import eruda from 'eruda';
-
 
 
 const themeParams = {
@@ -83,12 +82,13 @@ type Gender = 'male' | 'female' | 'secret';
 
 function App() {  
   eruda.init();
-  init();
    //const initDataRaw = useRawInitData()
   const launchParams = useLaunchParams()
   
   useEffect(() => {
     console.log(launchParams)
+    init();
+    console.log(isMiniAppMounted())
   },  [launchParams]) 
 
   const [step, setStep] = useState(0)
@@ -166,6 +166,7 @@ function App() {
   
   const weightOptions = createArray(150, 0, "кг")
   const heightOptions = createArray(300, 0, "см")
+  const [miniApp] = initMiniApp();
   return (
     <div className="app-fullscreen bg-white">
       <ProgressBar className='mt-5' currentStep={step} totalSteps={totalSteps} />
