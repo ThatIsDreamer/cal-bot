@@ -5,6 +5,13 @@ import {
   hapticFeedbackImpactOccurred,
   backButton,
   init as initTelegram,
+  //setDebug,
+  mountBackButton,
+  restoreInitData,
+  miniApp,
+  bindThemeParamsCssVars,
+  mountViewport,
+  bindViewportCssVars,
 } from "@telegram-apps/sdk-react";
 import myAnimation from "./assets/wave.gif";
 import maleAnimation from "./assets/male.gif";
@@ -134,12 +141,18 @@ function App() {
   const heightOptions = createArray(300, 0, "см");
 
   useEffect(() => {
+    //setDebug(import.meta.env.DEV);
     initTelegram();
-    if (isTMA() && window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
-    } else {
-      console.warn("Not running inside Telegram WebApp.");
+    mountBackButton.ifAvailable();
+    restoreInitData();
+    if (miniApp.mountSync.isAvailable()) {
+      miniApp.mountSync();
+      bindThemeParamsCssVars();
+    }
+    if (mountViewport.isAvailable()) {
+      mountViewport().then(() => {
+        bindViewportCssVars();
+      });
     }
   }, []);
 
