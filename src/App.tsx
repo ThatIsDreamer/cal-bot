@@ -3,14 +3,7 @@ import { mockTelegramEnv, emitEvent } from "@telegram-apps/bridge";
 import {
   useLaunchParams,
   hapticFeedbackImpactOccurred,
-  init,
   backButton,
-  swipeBehavior,
-  miniApp,
-  bindViewportCssVars,
-  bindThemeParamsCssVars,
-  closeMiniApp,
-  viewport,
 } from "@telegram-apps/sdk-react";
 import myAnimation from "./assets/wave.gif";
 import maleAnimation from "./assets/male.gif";
@@ -102,10 +95,6 @@ mockTelegramEnv({
 // Новый тип для пола
 type Gender = "male" | "female" | "secret";
 
-// Utility to check if in real Telegram environment
-const isRealTelegram = () => {
-  return window.Telegram?.WebApp?.initData !== undefined;
-};
 
 function App() {
   eruda.init();
@@ -144,34 +133,11 @@ function App() {
   const heightOptions = createArray(300, 0, "см");
 
   useEffect(() => {
-    // Only run if inside Telegram WebApp
     if (window.Telegram && window.Telegram.WebApp) {
-      try {
-        // Initialize the SDK
-        init();
-
-        setTimeout(() => {
-          // Mark mini app as ready
-          if (miniApp?.ready?.isAvailable?.() && typeof miniApp.ready === "function") {
-            miniApp.ready();
-          }
-          // Expand viewport if available
-          if (viewport?.expand?.isAvailable?.() && typeof viewport.expand === "function") {
-            viewport.expand();
-            bindViewportCssVars();
-          }
-          // Bind theme variables
-          bindThemeParamsCssVars();
-          // Disable vertical swipe if available
-          if (swipeBehavior?.disableVertical?.isAvailable?.() && typeof swipeBehavior.disableVertical === "function") {
-            swipeBehavior.disableVertical();
-          }
-        }, 100);
-      } catch (error) {
-        console.error("Failed to initialize Telegram SDK:", error);
-      }
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+      // Optionally, handle theme changes here if needed
     } else {
-      // Not in Telegram WebApp, optionally handle mock environment here
       console.warn("Not running inside Telegram WebApp.");
     }
   }, []);
@@ -907,18 +873,10 @@ function App() {
               <ColorButton
                 color="#5288c1"
                 onClick={() => {
-                  try {
-                    if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === "function") {
-                      window.Telegram.WebApp.close();
-                    } else if (isRealTelegram() && closeMiniApp.isAvailable()) {
-                      closeMiniApp();
-                    } else {
-                      console.log(
-                        "closeMiniApp not available or not in Telegram WebApp"
-                      );
-                    }
-                  } catch (error) {
-                    console.error("Error closing mini app:", error);
+                  if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === "function") {
+                    window.Telegram.WebApp.close();
+                  } else {
+                    console.warn("Not running inside Telegram WebApp or close() not available.");
                   }
                 }}
               >
