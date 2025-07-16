@@ -12,6 +12,7 @@ import {
   bindThemeParamsCssVars,
   mountViewport,
   bindViewportCssVars,
+  closeMiniApp,
 } from "@telegram-apps/sdk-react";
 import myAnimation from "./assets/wave.gif";
 import maleAnimation from "./assets/male.gif";
@@ -833,11 +834,7 @@ function App() {
               <ColorButton
                 color="#5288c1"
                 onClick={() => {
-                  if (isTMA() && window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === "function") {
-                    window.Telegram.WebApp.close();
-                  } else {
-                    console.warn("Not running inside Telegram WebApp or close() not available.");
-                  }
+                  closeMiniApp();
                 }}
               >
                 Завершить
