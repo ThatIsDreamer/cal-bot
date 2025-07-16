@@ -1,7 +1,7 @@
 import './App.css'
 import { mockTelegramEnv, emitEvent} from '@telegram-apps/bridge';
 //import { useRawInitData } from '@telegram-apps/sdk-react';
-import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, swipeBehavior, isMiniAppMounted, miniApp, mountViewport, bindViewportCssVars, bindThemeParamsCssVars, closeMiniApp } from '@telegram-apps/sdk-react';
+import { useLaunchParams, hapticFeedbackImpactOccurred, init, backButton, swipeBehavior, miniApp, bindViewportCssVars, bindThemeParamsCssVars, closeMiniApp, viewport } from '@telegram-apps/sdk-react';
 import myAnimation from './assets/wave.gif';
 import maleAnimation from './assets/male.gif';
 import femaleAnimation from './assets/female.gif';
@@ -85,24 +85,46 @@ function App() {
    //const initDataRaw = useRawInitData()
   const launchParams = useLaunchParams()
 
+
   useEffect(() => {
+    const initApp = async () => {
+      try {
+        // Initialize the SDK
+        init();
 
-    init(); 
-    if (miniApp.mountSync.isAvailable()) {
-      miniApp.mountSync();
-      bindThemeParamsCssVars();
-    }
-    console.log(isMiniAppMounted())
+        // Small delay to ensure WebApp is ready
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-    mountViewport.isAvailable() && mountViewport().then(() => {
-      bindViewportCssVars();
-    });
+        // Use ready() instead of deprecated mount
+        if (miniApp.ready.isAvailable()) {
+          miniApp.ready();
+          console.log("Mini app ready");
+        }
 
-  }, [])  
+        // Expand viewport (replacement for mountViewport)
+        if (viewport.expand.isAvailable()) {
+          viewport.expand();
+          bindViewportCssVars();
+          console.log("Viewport expanded");
+        }
+
+        // Bind theme variables
+        bindThemeParamsCssVars();
+
+        // Disable vertical swipe if available
+        if (swipeBehavior.disableVertical.isAvailable()) {
+          swipeBehavior.disableVertical();
+        }
+      } catch (error) {
+        console.error("Failed to initialize Telegram SDK:", error);
+      }
+    };
+
+    initApp();
+  }, []); 
 
   useEffect(() => {
     console.log(launchParams)
- 
 
   },  [launchParams]) 
 
