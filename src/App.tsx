@@ -4,7 +4,7 @@ import {
   useLaunchParams,
   hapticFeedbackImpactOccurred,
   backButton,
-  init,
+  init as initTelegram,
 } from "@telegram-apps/sdk-react";
 import myAnimation from "./assets/wave.gif";
 import maleAnimation from "./assets/male.gif";
@@ -134,7 +134,7 @@ function App() {
   const heightOptions = createArray(300, 0, "см");
 
   useEffect(() => {
-    init();
+    initTelegram();
     if (isTMA() && window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
