@@ -4,14 +4,6 @@ import {
   useLaunchParams,
   hapticFeedbackImpactOccurred,
   backButton,
-  init as initTelegram,
-  //setDebug,
-  mountBackButton,
-  restoreInitData,
-  miniApp,
-  bindThemeParamsCssVars,
-  mountViewport,
-  bindViewportCssVars,
   closeMiniApp,
 } from "@telegram-apps/sdk-react";
 import myAnimation from "./assets/wave.gif";
@@ -147,26 +139,6 @@ function App() {
 
   const weightOptions = createArray(150, 0, "кг");
   const heightOptions = createArray(300, 0, "см");
-
-  useEffect(() => {
-    //setDebug(import.meta.env.DEV);
-    initTelegram();
-    mountBackButton.ifAvailable();
-    restoreInitData();
-    if (miniApp.mountSync.isAvailable()) {
-      miniApp.mountSync();
-      if (!import.meta.env.DEV) {
-        bindThemeParamsCssVars();
-      }
-    }
-    if (mountViewport.isAvailable()) {
-      mountViewport().then(() => {
-        if (!import.meta.env.DEV) {
-          bindViewportCssVars();
-        }
-      });
-    }
-  }, []);
 
   // Back button handling
   useEffect(() => {
