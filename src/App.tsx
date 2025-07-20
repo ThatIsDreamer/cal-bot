@@ -49,6 +49,8 @@ declare global {
   }
 }
 
+//const API_URL = "https://calbot.ru/api/v1/";
+
 // Новый тип для пола
 type Gender = "male" | "female" | "secret";
 
@@ -109,6 +111,9 @@ if (import.meta.env.DEV) {
 
 function App() {
   eruda.init();
+  const timezoneOffset = new Date().getTimezoneOffset();
+  const utcOffset = timezoneOffset <= 0 ? `UTC+${Math.abs(timezoneOffset / 60)}` : `UTC-${timezoneOffset / 60}`;
+  console.log("User timezone:", Intl.DateTimeFormat().resolvedOptions().timeZone, `(${utcOffset})`);
   const launchParams = useLaunchParams();
 
   const [step, setStep] = useState(0);
@@ -150,11 +155,15 @@ function App() {
     restoreInitData();
     if (miniApp.mountSync.isAvailable()) {
       miniApp.mountSync();
-      bindThemeParamsCssVars();
+      if (!import.meta.env.DEV) {
+        bindThemeParamsCssVars();
+      }
     }
     if (mountViewport.isAvailable()) {
       mountViewport().then(() => {
-        bindViewportCssVars();
+        if (!import.meta.env.DEV) {
+          bindViewportCssVars();
+        }
       });
     }
   }, []);
@@ -222,7 +231,7 @@ function App() {
   }, [launchParams]);
 
   return (
-    <div className="app-fullscreen bg-white">
+    <div style={{ backgroundColor: "#FAF9F6" }} className="app-fullscreen">
       <ProgressBar className="mt-5" currentStep={step} totalSteps={totalSteps} />
       <AnimatePresence mode="wait">
         {step === 0 && (
@@ -373,7 +382,7 @@ function App() {
                 onClick={() =>
                   editingFromSummary === 2
                     ? (setStep(7), setEditingFromSummary(null))
-                    : setStep(3)
+                    : setStep(1)
                 }
               >
                 <ArrowLeft />
@@ -438,7 +447,7 @@ function App() {
                 onClick={() =>
                   editingFromSummary === 3
                     ? (setStep(7), setEditingFromSummary(null))
-                    : setStep(4)
+                    : setStep(2)
                 }
               >
                 <ArrowLeft />
@@ -504,7 +513,7 @@ function App() {
                 onClick={() =>
                   editingFromSummary === 4
                     ? (setStep(7), setEditingFromSummary(null))
-                    : setStep(5)
+                    : setStep(3)
                 }
               >
                 <ArrowLeft />
@@ -604,7 +613,7 @@ function App() {
                 onClick={() =>
                   editingFromSummary === 5
                     ? (setStep(7), setEditingFromSummary(null))
-                    : setStep(6)
+                    : setStep(4)
                 }
               >
                 <ArrowLeft />
@@ -714,7 +723,7 @@ function App() {
                 onClick={() =>
                   editingFromSummary === 6
                     ? (setStep(7), setEditingFromSummary(null))
-                    : setStep(7)
+                    : setStep(5)
                 }
               >
                 <ArrowLeft />

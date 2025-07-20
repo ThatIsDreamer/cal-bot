@@ -130,6 +130,7 @@ html, body, #root {
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
+  background-color: #FAF9F6;
 }
 
 @media (max-width: 600px) {
